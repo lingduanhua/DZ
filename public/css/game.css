@@ -1,0 +1,77 @@
+.inputBar{
+	width: 100%;
+	height: 40px;
+	border: 1px solid #aaa;
+	box-shadow: 0px 0px 12px -2px #444 inset;
+    padding: 3px 10px;
+    box-sizing: border-box;
+    clear: both;
+}
+.trueLetter{
+	color: #777;
+	display: inline-block;
+	width: 16px;
+}
+.errorLetter{
+	color:red;
+	display: inline-block;
+	width: 16px;
+}
+.clear{
+	clear: both;
+}
+.hideline{
+	display: none;
+}
+.showline{
+	display: block;
+}
+.ppp{
+	padding: 5px 10px;
+    box-sizing: border-box;
+    float: left;
+    height: 40px;
+    width: 100%;
+    clear: both;
+}
+.enterPanel{
+	line-height: 30px;
+	font-size: 18px;
+	clear: both;
+}
+.enterPanel span{
+	display: inline-block;
+	height: 30px;
+	width: 30px;
+	text-align: center;
+	float: left;
+}
+.enter{
+	width: 3px;
+	height: 100%;
+	font-size: 20px;
+	margin-left: 3px;
+	float: left;
+}
+.enter:focus{
+	border: none;
+	outline: none;
+}
+#grade-bar{
+	float: left;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 0px; 
+}
+.bar-item{
+	width: 20%;
+	float: left;
+	margin-right: 4%;
+	margin-bottom: 10px;
+}
+.bar-item input{
+	width: 60px;
+	padding: 3px 10px; 
+	border-radius: 3px;
+	margin-left: 5px;
+}

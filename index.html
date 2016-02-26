@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>DZ</title>
+	<link rel="stylesheet" type="text/css" href="public/css/main.css">
+	<link rel="stylesheet" type="text/css" href="public/css/game.css">
+	<script type="text/javascript" src="public/static/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="public/js/game.js"></script>
+	<script type="text/javascript" src="public/js/controller.js"></script>
+	<script type="text/javascript" src="public/js/DB.js"></script>
+	<script type="text/javascript" src="public/js/articleController.js"></script>
+	<script type="text/javascript" src="public/js/article.js"></script>
+	<script type="text/javascript" src="public/js/view.js"></script>
+	<script type="text/javascript" src="public/js/main.js"></script>
+</head>
+<body>
+<div id="back">
+	<div class="sider">
+		<div id="login-info">
+			<div id="head-img"></div>
+			<div id="user-info">
+				<div class="user-name">harrry</div>
+			</div>
+			<div id="to-login">登录</div>
+		</div>
+
+		<ul class="side-list">
+			<li class="nav-item" for="index">主页</li>
+			<li class="nav-item" for="grade">成绩</li>
+			<li class="nav-item" for="article">文章</li>
+			<li class="nav-item" for="-page">同步</li>
+		</ul>
+	</div>
+	<div class="main">
+		<div class="header">
+			<div id="menu-button">菜单</div>
+			<div id="title"><span>Harrry 打字</span></div>
+		</div>
+		<div class="center">
+			<div class="page" id="index-page">
+				<h3 id="welcome">欢迎来到Harrry打字</h3>
+				<div id="lang-choose">
+					<div class="lang-item" onclick="start_dz('zh')">中文</div>
+					<div class="lang-item" onclick="start_dz('en')">英文</div>
+				</div>
+			</div>
+			<div class="page"  id="dz-page">
+				<div id="article-bar">
+					<label>文章:</label>
+					<span id="article-title">Harrry打字</span>
+					<button id="change-article">更换文章</button>
+				</div>
+				<div id="dz-main"></div>
+			</div>
+			<div class="page"  id="article-page">
+				<div class="article-table-head">
+					<div class="page-title">文章列表</div>
+					<div id="article-toolbar">
+						<button id="add-article">添加文章</button>
+					</div>
+					<div id="article-table-panel">
+						<table id="article-table">
+							<thead>
+								<th>序号</th>
+								<th>标题</th>
+								<th>语言</th>
+								<th>字数</th>
+								<th>操作</th>
+							</thead>
+							<tbody id="article-table-body"></tbody>
+						</table>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			2016-2-20
+		</div>
+	</div>
+</div>
+<div id="add-article-dialog" class="dialog">
+	<div class="dialog-head">
+		<span class="dialog-title">添加文章</span>
+		<div class="dialog-close">x</div>
+	</div>
+	<div class="dialog-body">
+		<div id="article-add-form">
+			<div class="form-item">
+				<label>文章标题</label><input type="text" name="article_name" />
+			</div>
+			<div class="form-item">
+				<label>语言</label>
+				<select name="article_lang"><option>中文</option><option>English</option></select>
+			</div>
+			<div class="form-item">
+				<label>文章内容</label>
+				<input type="file" name="article_file" />
+				<textarea id="article-body" name="article_file"></textarea>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="cover-level"></div>
+</body>
+</html> 
