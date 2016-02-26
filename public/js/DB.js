@@ -3,7 +3,7 @@ App.database = (function () {
 
     var smallDatabase;
 
-    function runQuery(query, data, successCallback) {
+    function runQuery(query, data, successCallback, errorCallback) {
         var i, l, remaining;
 
         if (!(data[0] instanceof Array)) {
@@ -27,13 +27,17 @@ App.database = (function () {
             }
         }
 
-        function errorCallback(tx, e) {
-            alert("An error has occurred");
+        function innererrorCallback(tx, e) {
+            if (errorCallback) {
+                errorCallback(tx);
+            }else{
+                alert("An error has occurred");
+            }
         }
 
         smallDatabase.transaction(function (tx) {
             for (i = 0, l = data.length; i < l; i = i + 1) {
-                tx.executeSql(query, data[i], innerSuccessCallback, errorCallback);
+                tx.executeSql(query, data[i], innerSuccessCallback, innererrorCallback);
             }
         });
     }

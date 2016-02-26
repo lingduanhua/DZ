@@ -8,9 +8,11 @@ App.articleController = {
 		if(!this.is_load){
 			App.model.article.selectAllArticles(function(rs){
 				App.articleController.list = rs;
+				App.view.showArticles(App.articleController.list);
 			});
-			App.view.showArticles(this.list);
+			is_load = true;
 		}
+		App.view.showArticles(this.list);
 	},
 
 	random_article : function(){
@@ -22,11 +24,15 @@ App.articleController = {
 	},
 
 	selectAllArticles : function(){
-		return list;
+		return this.list;
 	},
 
-	add_article : function(){
-		App.view.article.add_article();
+	insert_article : function(article,successCallBack,errorCallBack){
+		App.model.article.insertArticles([article],function(){
+			successCallBack();
+			this.is_load = false;
+			App.articleController.load();
+		},errorCallBack);
 	}
 
 }

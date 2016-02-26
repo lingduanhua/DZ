@@ -7,6 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="public/css/game.css">
 	<script type="text/javascript" src="public/static/jquery-2.1.1.min.js"></script>
 	<script type="text/javascript" src="public/js/game.js"></script>
+	<script type="text/javascript" src="public/js/dialog.js"></script>
 	<script type="text/javascript" src="public/js/controller.js"></script>
 	<script type="text/javascript" src="public/js/DB.js"></script>
 	<script type="text/javascript" src="public/js/articleController.js"></script>
@@ -57,7 +58,7 @@
 				<div class="article-table-head">
 					<div class="page-title">文章列表</div>
 					<div id="article-toolbar">
-						<button id="add-article">添加文章</button>
+						<button id="add-article" class="show-dialog" for="add-article">添加文章</button>
 					</div>
 					<div id="article-table-panel">
 						<table id="article-table">
@@ -92,14 +93,19 @@
 			</div>
 			<div class="form-item">
 				<label>语言</label>
-				<select name="article_lang"><option>中文</option><option>English</option></select>
+				<select name="article_lang"><option value="0">中文</option><option value="1">English</option></select>
 			</div>
 			<div class="form-item">
 				<label>文章内容</label>
-				<input type="file" name="article_file" />
-				<textarea id="article-body" name="article_file"></textarea>
+				<input id="article-file" type="file" name="article_file" accept='.txt'/>
+				<button class="btn primary-btn" id="article-upload-btn">本地文件</button>
+				<textarea id="article-body" name="article_body"></textarea>
 			</div>
 		</div>
+	</div>
+	<div class="dialog-foot">
+		<button class="btn cancel-btn">取消</button>
+		<button class="btn sure-btn" onclick="add_article(this)">确定</button>
 	</div>
 </div>
 <div id="cover-level"></div>

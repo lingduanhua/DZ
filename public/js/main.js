@@ -26,11 +26,29 @@ $(function(){
 	$('.nav-item').on('click',function(){
 		skip_page($(this).attr('for'));
 	});
-	//添加文章
-	$('#add-article').on("click",function(){
-		$('#add-article-dialog').show();
+
+	$('#article-upload-btn').on('click',function(){
+		//console.log("dfsdfdf");
+		$('#article-file').click();
 	})
 
+	$('#article-file').on('change',function(){
+		var fileList = this.files;
+		if(fileList){
+			for(var i = 0; i < fileList.length; i ++){
+				// if(!/image\/\w+/.test(fileList[i].type)){
+				//     continue;
+				// }
+					//读取文件
+				var reader = new FileReader();
+				reader.onloadend = function (e) {
+	                var result = e.target.result;
+	                $('#article-body').val(result);
+	            };
+				reader.readAsText(fileList[i],'gbk'); 
+			}
+		}
+	})
 })
 function start_dz(lang){
 	App.controller.start_dz(lang,function(status,text){
@@ -54,4 +72,19 @@ function skip_page(page){
 
 function errorAlert(text){
 	alert(text);
+}
+function  add_article(btn){
+	var form = $('#article-add-form');
+	var article_text = form.find('textarea[name=article_body]').val();
+	var data = {
+		title : form.find('input[name=article_name]').val(),
+		lang  : form.find('select[name=article_lang]').val(),
+		body  : article_text,
+		length: article_text.length
+ 	}
+ 	App.articleController.insert_article(data,function(){
+ 		$('#add-article-dialog').find('.dialog-close').click();
+ 	},function(text){
+ 		errorAlert(text);
+ 	})
 }

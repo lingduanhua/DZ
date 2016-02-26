@@ -30,8 +30,132 @@ textarea{
 .page{
 	display: none;
 }
+.btn{
+	padding:4px 12px;
+	text-align:center;
+	background:#fff;
+	border:1px solid #aaa;
+	border-radius:3px;
+	letter-spacing:2px;
+	cursor:pointer;
+	color: #333;
+}
+.btn:hover{
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+.sure-btn{
+	background:#5CB85C;
+	border-color:#4CAE4C;
+	color:#fff;
+}
+.sure-btn:hover{
+	background:#449d44;
+	border-color:#398439;;
+}
+.primary-btn{
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+.primary-btn:hover{
+    background-color: #286090;
+    border-color: #204d74;
+}
+
+/*===弹出层==*/
+#cover-level{
+	display: none;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+	background: rgba(0,0,0,0.4);
+	top: 0;
+	left: 0;
+}
+.dialog{
+	display: none;
+	position: absolute;
+	border:3px #777 solid;
+	border-radius: 5px;
+	box-shadow: 1px 1px 7px 2px #666;
+	background: #fdfdfd;
+	top: 10%;
+	left: 25%;
+	z-index: 11;
+}
+.dialog-head{
+	box-sizing:border-box;
+	width:100%;
+	height:40px;
+	border-bottom:1px solid #aaa;
+	padding:0px 10px 0px 20px;
+}
+.dialog-title{
+	line-height:40px;
+}
+.dialog-close{
+	float:right;
+	width:20px;
+	height:20px;
+	margin-top:10px;
+	text-align:center;
+	border-radius:50%;
+	line-height:20px;
+	cursor:pointer;
+}
+.dialog-close:hover{
+	background:#DB4C3F;
+	color:#fff;
+}
+.dialog-body{
+	padding:15px 30px;
+	overflow:auto;
+	box-sizing:border-box;
+}
+.dialog-body::-webkit-scrollbar{
+	width: 5px;
+	height: 5px;
+}
+.dialog-body::-webkit-scrollbar-button{
+	display: none;
+}
+.dialog-body::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 0;
+    background: rgba(0,0,0,0.1);
+}
+.dialog-body::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.2);
+}
+.dialog-foot{
+	box-sizing:border-box;
+	width:100%;
+	height:40px;
+	border-top:1px solid #aaa;
+	padding:8px 10px 7px 20px;
+}
+.dialog-foot button{
+	float:right;
+	margin-left:10px;
+}
+.form-item{
+	padding:10px;
+}
+.form-item label{
+	display:inline-block;
+	width:65px;
+	text-align:right;
+	padding-right:10px;
+}
+
+
 /*=============边栏============*/
 .sider{
+	display: none;
 	position: absolute;
 	top : 0;
 	left:-160px;
@@ -201,52 +325,7 @@ textarea{
 }
 
 /*=====弹出层=====*/
-#cover-level{
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	z-index: 10;
-	background: rgba(0,0,0,0.4);
-	top: 0;
-	left: 0;
-}
-.dialog{
-	position: absolute;
-	border:3px #777 solid;
-	border-radius: 5px;
-	box-shadow: 1px 1px 7px 2px #666;
-	background: #fdfdfd;
-	top: 10%;
-	left: 25%;
-	z-index: 11;
-}
-.dialog-head{
-	box-sizing:border-box;
-	width:100%;
-	height:40px;
-	border-bottom:1px solid #aaa;
-	padding:0px 10px 0px 20px;
-}
-.dialog-title{
-	line-height:40px;
-}
-.dialog-close{
-	float:right;
-	width:20px;
-	height:20px;
-	margin-top:10px;
-	text-align:center;
-	border-radius:50%;
-	line-height:20px;
-	cursor:pointer;
-}
-.dialog-close:hover{
-	background:#DB4C3F;
-	color:#fff;
-}
-.dialog-body{
-	padding:20px 30px;
-}
+
 #add-article-dialog{
 	width: 50%;
 	height: 60%;
@@ -254,21 +333,19 @@ textarea{
 	min-height: 300px;
 	max-height: 500px;
 }
-.form-item{
-	padding:10px;
-}
-.form-item label{
-	display:inline-block;
-	width:65px;
-	text-align:right;
-	padding-right:10px;
+#add-article-dialog .dialog-body{
+
 }
 #article-body{
-	margin-left:75px;
-	min-height:120px;
-	max-height:200px;
-	min-width:;
+	width:80%;
+	height:150px;
+	margin-left:10%;
+	margin-top:10px;
+	resize:none;
+}
+#article-file{
+	display:none;
 }
 #article-add-form{
-
+	min-width: 300px;
 }
