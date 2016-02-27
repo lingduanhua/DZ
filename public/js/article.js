@@ -32,8 +32,8 @@ App.model.article = {
 		App.database.runQuery("SELECT id, title, lang, length FROM articles", [], successCallback);
 	},
 
-	selectFullArticle : function(id, successCallback) {
-        App.database.runQuery("SELECT id, title, lang, body FROM articles WHERE id = ?", [id], successCallback);
-    }
+	selectFullArticle : function(id, successCallback, errorCallback) {
+        App.database.runQuery("SELECT id, title, lang, body FROM articles WHERE id = ?", [id], successCallback, errorCallback);
+    } 
 
 }

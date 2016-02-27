@@ -14,16 +14,16 @@ App.controller = {
 
 	},
 
-	start_dz : function(lang, fun){
+	start_dz : function(lang, success, error){
 		//设置 语言
 		this.lang = lang;
 		//随机文章
-		this.article = App.articleController.random_article();
-		if(this.article == false){
-			fun(false,'还没有文章快去添加吧');
-		}else{
-			fun(true,this.article.body);
-		}
+		App.articleController.random_article(success, error);
+		// if(this.article == false){
+		// 	fun(false,'还没有文章快去添加吧');
+		// }else{
+		// 	fun(true,this.article.body);
+		// }
 	},
 
 	over_dz : function(){

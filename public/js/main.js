@@ -1,25 +1,13 @@
 $(function(){
 	//加载App
 	App.controller.load();
-	skip_page('index');
+	skip_page('article');
 	//弹出菜单
 	$('#menu-button').on('click',function(){
 		if($('.sider').is(':visible')){
-			$('.sider').animate({
-				left : "-160px"
-			},250,function(){
-				$('.sider').hide();
-			});
-			$('.main').animate({
-				left : 0
-			},250);
+			hide_menu();
 		}else{
-			$('.sider').show().animate({
-				left : 0
-			},250);
-			$('.main').animate({
-				left : "150px" 
-			},250);
+			show_menu();
 		}
 	});
 	//导航栏跳转
@@ -50,14 +38,34 @@ $(function(){
 		}
 	})
 })
+function hide_menu(){
+	if($('.sider').is(':visible')){
+		$('.sider').animate({
+			left : "-160px"
+		},250,function(){
+			$('.sider').hide();
+		});
+		$('.main').animate({
+			left : 0
+		},250);
+	}
+}
+function show_menu(){
+	if(!$('.sider').is(':visible')){
+		$('.sider').show().animate({
+			left : 0
+		},250);
+		$('.main').animate({
+			left : "150px"
+		},250);
+	}
+}
 function start_dz(lang){
-	App.controller.start_dz(lang,function(status,text){
-		if(!status){
-			errorAlert(text);
-		}else{
-			skip_page('dz');
-			new DZ("dz-main",text);
-		}
+	App.controller.start_dz(lang,function(text){
+		skip_page('dz');
+		new DZ("dz-main",text);
+	},function(text){
+		errorAlert(text);
 	});
 }
 
@@ -67,9 +75,8 @@ function skip_page(page){
 	$('.nav-item').removeClass('active');
 	$('.nav-item[for='+page+']').addClass('active');
 	App.controller.route(page);
-	$('#menu-button').click();
+	hide_menu();
 }
-
 function errorAlert(text){
 	alert(text);
 }

@@ -15,12 +15,14 @@ App.articleController = {
 		App.view.showArticles(this.list);
 	},
 
-	random_article : function(){
+	random_article : function(success, error){
 		if(this.list.length <= 0){
 			return false;
 		}
 		var id = this.list[Math.ceil(Math.random()*this.list.length)].id;
-		return App.model.article.selectFullArticle(id);
+		App.model.article.selectFullArticle(id, function(articles){
+			success(articles[0].body);
+		}, error);
 	},
 
 	selectAllArticles : function(){
