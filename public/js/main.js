@@ -15,12 +15,22 @@ $(function(){
 		skip_page($(this).attr('for'));
 	});
 
-	$('#article-upload-btn').on('click',function(){
-		//console.log("dfsdfdf");
-		$('#article-file').click();
+	$('#add-article').on('click',function(){
+		App.articleController.edit_article('', function(html){
+			$.dialog('edit-article', '添加文章', html, article_post);
+		});
 	})
 
-	$('#article-file').on('change',function(){
+	$('#change-article').on('click', function(){
+		start_dz(App.controller.lang);
+	})
+
+	//上传文件
+	$(document).on('click','#article-upload-btn',function(){
+		$(this).prev().click();
+	})
+
+	$(document).on('change','#article-file',function(){
 		var fileList = this.files;
 		if(fileList){
 			for(var i = 0; i < fileList.length; i ++){
@@ -61,12 +71,17 @@ function show_menu(){
 	}
 }
 function start_dz(lang){
-	App.controller.start_dz(lang,function(text){
+	App.controller.start_dz(lang,function(title,text){
 		skip_page('dz');
-		new DZ("dz-main",text);
+		$('#article-title').text(title);
+		DZ.getInstance("dz-main",text);
 	},function(text){
 		errorAlert(text);
 	});
+}
+
+function errorAlert(text){
+	alert(text);
 }
 
 function skip_page(page){
@@ -80,7 +95,7 @@ function skip_page(page){
 function errorAlert(text){
 	alert(text);
 }
-function  add_article(btn){
+function article_post(id){
 	var form = $('#article-add-form');
 	var article_text = form.find('textarea[name=article_body]').val();
 	var data = {
@@ -89,9 +104,28 @@ function  add_article(btn){
 		body  : article_text,
 		length: article_text.length
  	}
- 	App.articleController.insert_article(data,function(){
- 		$('#add-article-dialog').find('.dialog-close').click();
- 	},function(text){
- 		errorAlert(text);
- 	})
+ 	if(!isNaN(id) && id > 0){
+ 		data.id = id;
+ 		console.log('edit_main :' + id);
+ 		App.articleController.update_article(data);
+ 	}else{
+ 		App.articleController.insert_article(data);
+ 	}
+ 	
+}
+function del_article(id){
+	highAlert('confirm',function(){
+		App.articleController.del_article({id},function(){
+	 		successAlert("删除成功");
+	 	},function(text){
+	 		errorAlert(text);
+	 	})
+	});	
+}
+function edit_article(id){
+ 	App.articleController.edit_article(id, function(html){
+ 		$.dialog('edit-article', '编辑文章', html, function(){
+ 			article_post(id);
+ 		});
+ 	})	
 }

@@ -41,7 +41,10 @@ App.database = (function () {
             }
         });
     }
-
+    /**
+     * 打开数据库
+     * @param  {function} successCallback 灰调函数
+     */
     function open(successCallback) {
         smallDatabase = openDatabase("APP", "1.0", "Not The FT Web App", (5 * 1024 * 1024));
         runQuery("CREATE TABLE IF NOT EXISTS articles(id INTEGER PRIMARY KEY ASC, title TEXT, lang INTEGER, body TEXT, length INTEGER)", [], successCallback);

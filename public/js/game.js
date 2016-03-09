@@ -4,34 +4,45 @@ if(!window.addEventListener){
 	}
 }
 
-DZ = function( selector , text){
-	if( this instanceof DZ ){
-		this.main = document.getElementById(selector);
-		this.main.style.width = "625px";
-		this.text = text;
+DZ = (function(){
+
+Construct = function (selector, text){
+	this.main = document.getElementById(selector);
+	this.main.style.width = "625px";
+	this.load(text);
+	this.loadEvent();
+}
+
+Construct.prototype = { 
+
+
+	load : function( text ){
+
+		if(this.timer){
+			clearInterval(this.timer);
+		}
+
 		this.main.innerHTML = "";
+
+		if(text && text.length > 0){
+	 		this.text = text;
+	 	}else{
+	 		return;
+	 	}
 		this.enterArray = [];
 		this.now_line = 0;
 		this.all_line = 0;
 		this.clock = 0;
-		//this.lang = window.DZlang;
-		this.timer;
 		this.word_num = 0;
 		this.right_num = 0;
 		this.show_line_num = 4;
 		this.finish = false;
-		this.load();
-	}else{
-		return new DZ(selector);
-	}
-}
-DZ.prototype = { 
-	load : function(){
+		this.timer = undefined;
+
 		this.loadGradeBar();
 		this.loadEnterPanel();
 		this.createEnter();
-		this.loadEvent();
-	 },
+	},
 
 	 loadEnterPanel : function(){
 	 	var length = this.text.length;
@@ -143,6 +154,8 @@ DZ.prototype = {
 	 },
 
 	 oneinput : function(){
+	 	console.log("timer is");
+	 	console.log(this.timer);
 	 	if(typeof this.timer == "undefined"){
 	 		this.startTimer();
 	 	}
@@ -359,6 +372,7 @@ Enter.prototype = {
 
 	rollback : function(){
 		if(this.start_point > 0){
+			console.log("cccc");
 	 		this.input.removeChild(this.enterArray[--this.start_point]);
 	 		if(this.spanArray[this.start_point].className == "trueLetter") this.dz.right_num --;
 	 		this.dz.word_num --;
@@ -367,3 +381,19 @@ Enter.prototype = {
 	}
 
 }
+
+var unique;
+
+function getInstance(selector, text){
+    if( unique === undefined ){
+        unique = new Construct(selector, text);
+    }else{
+    	unique.load(text);
+    }
+    return unique;
+}
+
+return {
+		getInstance : getInstance
+	}
+})();
