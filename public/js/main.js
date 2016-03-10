@@ -15,12 +15,13 @@ $(function(){
 		skip_page($(this).attr('for'));
 	});
 
+	//添加文章按钮
 	$('#add-article').on('click',function(){
 		App.articleController.edit_article('', function(html){
 			$.dialog('edit-article', '添加文章', html, article_post);
 		});
 	})
-
+	//切换文章按钮
 	$('#change-article').on('click', function(){
 		start_dz(App.controller.lang);
 	})
@@ -29,7 +30,7 @@ $(function(){
 	$(document).on('click','#article-upload-btn',function(){
 		$(this).prev().click();
 	})
-
+	//将文件内容写入文本域
 	$(document).on('change','#article-file',function(){
 		var fileList = this.files;
 		if(fileList){
@@ -83,7 +84,10 @@ function start_dz(lang){
 function errorAlert(text){
 	alert(text);
 }
-
+/**
+ * 菜单页跳转
+ * @param  {string} page 页id
+ */
 function skip_page(page){
 	$('.page').hide();
 	$('#' + page + '-page').show();
@@ -95,6 +99,10 @@ function skip_page(page){
 function errorAlert(text){
 	alert(text);
 }
+/**
+ * 整理文章的修改添加时提交的信息 并交给控制器处理
+ * @param  {int} id 有值则表示 修改
+ */
 function article_post(id){
 	var form = $('#article-add-form');
 	var article_text = form.find('textarea[name=article_body]').val();

@@ -3,6 +3,15 @@ App.database = (function () {
 
     var smallDatabase;
 
+    /**
+     * 执行sql语句
+     * @param  {string} query           sql语句
+     * @param  {array} data            数据体
+     * @param  function successCallback 成功回调函数
+     * @param  function errorCallback   失败回调函数
+     * successCallback : array  返回数据
+     * errorCallBack   : text 错误信息
+     */
     function runQuery(query, data, successCallback, errorCallback) {
         var i, l, remaining;
 

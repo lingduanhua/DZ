@@ -1,11 +1,19 @@
+// IE 兼容 addEventlistener 方法
 if(!window.addEventListener){
 	window.addEventListener = function(eventtype,todo,flag){
 		window.attachEvent(eventtype,todo);
 	}
 }
 
+/*!
+ * 打字主类   应用单模式
+ */
 DZ = (function(){
-
+/**
+ * 主构造器
+ * @param {string} selector 选择器
+ * @param {string} text     文章内容
+ */
 Construct = function (selector, text){
 	this.main = document.getElementById(selector);
 	this.main.style.width = "625px";
@@ -14,12 +22,14 @@ Construct = function (selector, text){
 }
 
 Construct.prototype = { 
-
-
+	/**
+	 * 初始化
+	 * @param  {string} text 文章内容
+	 */
 	load : function( text ){
 
 		if(this.timer){
-			clearInterval(this.timer);
+			clearInterval(this.timer); // 停止计时器
 		}
 
 		this.main.innerHTML = "";
@@ -29,21 +39,27 @@ Construct.prototype = {
 	 	}else{
 	 		return;
 	 	}
-		this.enterArray = [];
-		this.now_line = 0;
-		this.all_line = 0;
-		this.clock = 0;
-		this.word_num = 0;
-		this.right_num = 0;
-		this.show_line_num = 4;
-		this.finish = false;
-		this.timer = undefined;
+	 	//初始化变量
+	 	this.length = this.text.length	//文章总字数
+		this.enterArray = [];			//行数组
+		this.now_line = 0;				//正在输入的行号
+		this.all_line = 0;				//总行数
+		this.clock = 0;					//用间 单位s
+		this.word_num = 0;				//打字总数
+		this.right_num = 0;				//正确总数
+		this.show_line_num = 4;			//每页显示行数
+		this.finish = false;			//是否结束
+		this.timer = undefined;			// 清除计时器
 
-		this.loadGradeBar();
-		this.loadEnterPanel();
-		this.createEnter();
+		//加载视图
+		this.loadGradeBar();			//计分板
+		this.loadEnterPanel();			//输入面板
+		this.createEnter();				//光标
 	},
 
+	/**
+	 * 加载输入面板
+	 */
 	 loadEnterPanel : function(){
 	 	var length = this.text.length;
 	 	var div = document.createElement("div");
@@ -77,6 +93,9 @@ Construct.prototype = {
 	 	this.main.appendChild(div);
 	 },
 
+	 /**
+	 * 加载计分板
+	 */
 	 loadGradeBar : function(){
 	 	var div = document.createElement("div");
 	 	div.id = "grade-bar";
@@ -99,6 +118,9 @@ Construct.prototype = {
 	 	this.main.appendChild(div);
 	 },
 
+	 /**
+	  * 创建光标 
+	  */
 	 createEnter : function(){
 	 	var input = document.createElement("input");
 		input.className = 'enter';
@@ -106,16 +128,20 @@ Construct.prototype = {
 		var flag = false;
 		this.findEnter().input.appendChild(input);
 		input.addEventListener('input',function(){
-			// console.log('input:' + this.value);
-
-			reg = /[ a-z]+/;
-			if(reg.test(this.value) && !flag){
+			reg = /[ a-z]+/;		//空格或英文字母
+			//英文输入时可监听到keypress事件，直接打印
+			//
+			//当监听不到keypress 却触发input时说明中文输入法正在输入
+			//中文输入法下当点击空格时完成输入，应该打印
+			//但不会触发keypress事件
+			//所以需判断此时的值是否为汉字或符号
+			if(!flag && reg.test(this.value)){
 				return;
 			}
 			flag = false;
 			that.oneinput();
-			
 		},false);
+		//当中文输入时 监听不到keypress事件
 		input.addEventListener('keypress',function(e){
 			flag = true;
 		},false);
@@ -123,14 +149,14 @@ Construct.prototype = {
 		this.pointEnter();
 	 },
 
-	 findEnter : function(){
-	 	return this.enterArray[this.now_line];
-	 },
-
+	 /**
+	  * 主面板事件
+	  */
 	 loadEvent : function(){
 	 	that = this;
 	 	var flag = true;
 	 	this.main.addEventListener('click', function(){that.pointEnter.call(that)} ,false);
+	 	//firefox 会同时触发 keypress keydown 其他浏览器只会触发keydown
 	 	this.main.addEventListener('keypress',function(e){
 	 		if(e.keyCode == "8" && that.enter.value == "" ){
 	 			that.rollback();
@@ -144,18 +170,31 @@ Construct.prototype = {
 	 	},false);
 	 },
 
+	 /**
+	  * 删除一个字符
+	  */
 	 rollback : function(){
 	 	var line = this.findEnter().rollback();
-	 	
 	 },
 
+	 /**
+	  * 得到正在输入的行
+	  */
+	 findEnter : function(){
+	 	return this.enterArray[this.now_line];
+	 },
+
+	 /**
+	  * 光标获得焦点
+	  */
 	 pointEnter : function(){
 	 	this.enter.focus();
 	 },
 
+	 /**
+	  * 打印单个字符
+	  */
 	 oneinput : function(){
-	 	console.log("timer is");
-	 	console.log(this.timer);
 	 	if(typeof this.timer == "undefined"){
 	 		this.startTimer();
 	 	}
@@ -168,10 +207,17 @@ Construct.prototype = {
 		}
 	},
 
+	/**
+	 * 打印多个字符(中文输入法)
+	 * @param  {string} word 打印的字符串
+	 */
 	 insterWord : function(word){
 	 	this.findEnter().insterWord(word);
 	 },
 
+	 /**
+	  * 转行
+	  */
 	 nextline : function(){
 	 	this.findEnter().input.removeChild(this.enter);
 	 	this.now_line ++;
@@ -180,13 +226,15 @@ Construct.prototype = {
 	 		this.gameOver();
 	 		return;
 	 	}
-	 	console.log(this.now_line % this.show_line_num);
 	 	if(this.now_line % this.show_line_num == 0){
 	 		this.nextPage();
 	 	}
 	 	this.createEnter();
 	 },
 
+	 /**
+	  * 下一页
+	  */
 	 nextPage :function(){
 	 	for(var i = 0 ; i < this.show_line_num; i ++){
 	 		this.enterArray[this.now_line - i - 1].elem.className = "hideline";
@@ -196,40 +244,40 @@ Construct.prototype = {
 	 	}
 	 },
 
+	 /**
+	  * 开始计时
+	  */
 	 startTimer : function(){
 	 	that = this;
 	 	this.timer = setInterval(function(){
 	 		that.clock ++;
-	 		//console.log("all_word:"+that.word_num + "right_word:"+that.right_num + "clock:"+that.clock);
-	 		that.grade = parseInt((that.right_num  / that.clock) * 60);
-	 		that.updateTime(that.showtime());
-	 		that.updateSpeed();
-	 		that.updateSuccess();
+	 		that.updateGradeBar();
 	 	},1000);
 	 },
 
-	 updateTime : function(time){
-	 	document.getElementById('time-input').value = time;
+	 /**
+	  * 更新计分板
+	  */
+	 updateGradeBar : function(){
+	 	document.getElementById('time-input').value = this.getTime();
+	 	document.getElementById('speed-input').value = this.getGrade() + " 字/分钟";
+	 	document.getElementById('success-input').value = this.getRightRate() + " %";
+	 	document.getElementById('finish-input').value = this.getFinishRate() + " %";
 	 },
 
-	 updateSpeed : function(time){
-	 	document.getElementById('speed-input').value = this.grade + " 字/分钟";
-	 },
-
-	 updateSuccess : function(time){
-
-	 	document.getElementById('success-input').value = this.get_right_rate() + " %";
-	 },
-
-	 updateFinish : function(time){
-	 	document.getElementById('finish-input').value = parseInt((this.word_num / this.length) * 100) + " %";
-	 },
-
-	 get_right_rate : function(){
+	 getRightRate : function(){
 	 	return parseInt((this.right_num / (this.word_num == 0? 1 : this.word_num)) * 100);
 	 },
 
-	 showtime : function(){
+	 getFinishRate : function(){
+	 	return parseInt((this.word_num / this.length) * 100);
+	 },
+
+	 getGrade : function(){
+	 	return parseInt((that.right_num  / (that.clock == 0 ? 1 : this.clcok)) * 60);
+	 },
+
+	 getTime : function(){
 	 	var mm = parseInt(this.clock / 60);
 	 	var ss = this.clock % 60;
 	 	var hour = parseInt(mm / 60);
@@ -245,22 +293,33 @@ Construct.prototype = {
 	 	this.showFinishDialog();
 	 },
 
+	 /**
+	  * 展示最后的成绩面板
+	  * @return {[type]} [description]
+	  */
 	 showFinishDialog : function(){
+	 	console.log('right : ' + this.right_num);
+	 	console.log('word : ' + this.word_num);
+	 	console.log('length : ' + this.length);
 	 	var div = document.createElement("div");
 	 	div.id = "finish-dialog";
-	 	div.innerHTML = "<div id='dialog-main'>"+
-	 						"<div id='dialog-head'></div>"+
-	 						"<div id='dialog-content'>"+
-	 							"<p>总共用时:"+this.showtime()+"</p>"+
-	 							"<p>平均打字速度每分钟"+this.grade+"字</p>"+
-	 							"<p>正确率:"+parseInt((this.right_num / this.word_num) * 100) + " %</p>"+
-	 							"<p>"+this.resultWord()+"</p>"+
-	 						"<div>"+
-	 						"<div id='dialog-foot'><div>"+
-	 					"</div>"
+	 	div.innerHTML = "<div id='dialog-main'>"
+	 						+"<div id='dialog-head'></div>"
+	 						+"<div id='dialog-content'>"
+	 							+"<p>总共用时:"+ 	 this.getTime()
+	 							+"</p><p>平均速度:"+ this.getGrade() +"字每分钟"
+	 							+"</p><p>正确率:"+ 	 this.getRightRate() + " %"
+	 							+"</p><p>"+ 		 this.resultWord() 
+	 						+"</p></div>"
+	 						+"<div id='dialog-foot'></div>"
+	 					+"</div>";
 	 	this.main.appendChild(div);
 	 },
 
+	 /**
+	  * 根据得分  给出评价
+	  * @return {[type]} [description]
+	  */
 	 resultWord : function(){
 	 	if(parseInt((this.right_num / this.word_num) * 100) < 60){
 	 		return "正确率有待提高，赶紧练习哦！";
@@ -292,11 +351,11 @@ Construct.prototype = {
 	 	
 	 },
 
-	 get_result : function(){
+	 getResult : function(){
 	 	if(this.finish){
 	 		return {
-	 			grade : this.grade,
-	 			right_rate : this.get_right_rate()
+	 			grade : this.getGrade(),
+	 			right_rate : this.getRightRate()
 	 		}
 	 	}
 	 	return false;

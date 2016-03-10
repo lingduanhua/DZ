@@ -1,4 +1,11 @@
 App.view = {
+	/**
+	 * 文章基本信息列表
+	 * @param  {array(object)} articles 文章数组
+	 * {
+	 * 	id,title,lang,length
+	 * }
+	 */
 	showArticles : function(articles){
 		var html = "";
 		for (var i = 0; i < articles.length; i++) {
@@ -11,6 +18,11 @@ App.view = {
 		};
 		$('#article-table-body').html(html);
 	},
+
+	/**
+	 * 插入或修改文章是的表单
+	 * @param  {object} article 要修改的文章
+	 */
 	editArticle : function(article){
 		// var flag = true;
 		// if(typeof article == 'undefined' || !article || article){
