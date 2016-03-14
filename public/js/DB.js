@@ -38,7 +38,7 @@ App.database = (function () {
 
         function innererrorCallback(tx, e) {
             if (errorCallback) {
-                errorCallback(tx);
+                errorCallback(e);
             }else{
                 alert("An error has occurred");
             }
@@ -57,6 +57,7 @@ App.database = (function () {
     function open(successCallback) {
         smallDatabase = openDatabase("APP", "1.0", "Not The FT Web App", (5 * 1024 * 1024));
         runQuery("CREATE TABLE IF NOT EXISTS articles(id INTEGER PRIMARY KEY ASC, title TEXT, lang INTEGER, body TEXT, length INTEGER)", [], successCallback);
+        runQuery("CREATE TABLE IF NOT EXISTS grades(id INTEGER PRIMARY KEY ASC, speed INTEGER, right INTEGER, lang INTEGER, time INTEGER)", [], successCallback);
     }
 
     return {

@@ -16,7 +16,10 @@
 			};
 		}
 		if(cencel_function){
-			(dialog.find('.cancel-btn')[0]).onclick == cencel_function;
+			(dialog.find('.cancel-btn')[0]).onclick = function(){
+				cencel_function();
+				dialog.find('.dialog-close').click();
+			}
 		}
 		dialog.show();
 		$(window).resize();

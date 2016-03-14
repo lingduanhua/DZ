@@ -72,10 +72,12 @@ function show_menu(){
 	}
 }
 function start_dz(lang){
-	App.controller.start_dz(lang,function(title,text){
+	App.controller.start_dz(lang,function(lang, title, text){
 		skip_page('dz');
 		$('#article-title').text(title);
-		DZ.getInstance("dz-main",text);
+		window.cc = DZ.getInstance("dz-main", lang, text, App.controller.log_grade, function(){
+			skip_page('index');
+		});
 	},function(text){
 		errorAlert(text);
 	});
@@ -97,7 +99,11 @@ function skip_page(page){
 	hide_menu();
 }
 function errorAlert(text){
-	alert(text);
+	highAlert('error', text);
+}
+
+function successAlert(text){
+	highAlert('success', text);
 }
 /**
  * 整理文章的修改添加时提交的信息 并交给控制器处理
@@ -121,14 +127,14 @@ function article_post(id){
  	}
  	
 }
-function del_article(id){
-	highAlert('confirm',function(){
-		App.articleController.del_article({id},function(){
+function del_article(id,title){
+	highAlert('confirm','是否删除文章 ' + title, ['确定', '取消'],[function(){
+		App.articleController.delete_article({id},function(){
 	 		successAlert("删除成功");
 	 	},function(text){
 	 		errorAlert(text);
 	 	})
-	});	
+	}]);	
 }
 function edit_article(id){
  	App.articleController.edit_article(id, function(html){

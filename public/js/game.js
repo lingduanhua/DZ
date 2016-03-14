@@ -13,11 +13,15 @@ DZ = (function(){
  * 主构造器
  * @param {string} selector 选择器
  * @param {string} text     文章内容
+ * @param {function} gradeDriver 完成一篇文章时的回调函数
+ * @param {function} quitCallback 退出打字时的回调函数
  */
-Construct = function (selector, text){
+Construct = function (selector, lang, text, gradeDriver, quitCallback){
 	this.main = document.getElementById(selector);
 	this.main.style.width = "625px";
-	this.load(text);
+	this.gradeDriver = gradeDriver;
+	this.quitCallback = quitCallback;
+	this.load(lang, text);
 	this.loadEvent();
 }
 
@@ -26,7 +30,7 @@ Construct.prototype = {
 	 * 初始化
 	 * @param  {string} text 文章内容
 	 */
-	load : function( text ){
+	load : function(lang, text ){
 
 		if(this.timer){
 			clearInterval(this.timer); // 停止计时器
@@ -37,9 +41,14 @@ Construct.prototype = {
 		if(text && text.length > 0){
 	 		this.text = text;
 	 	}else{
-	 		return;
+	 		if(this.text && this.text.length > 0){
+
+	 		}else{
+	 			return;
+	 		}
 	 	}
 	 	//初始化变量
+	 	this.lang = lang;
 	 	this.length = this.text.length	//文章总字数
 		this.enterArray = [];			//行数组
 		this.now_line = 0;				//正在输入的行号
@@ -274,10 +283,13 @@ Construct.prototype = {
 	 },
 
 	 getGrade : function(){
-	 	return parseInt((that.right_num  / (that.clock == 0 ? 1 : this.clcok)) * 60);
+	 	console.log(this.right_num);
+	 	console.log(this.clock);
+	 	return parseInt((this.right_num  / (this.clock == 0 ? 1 : this.clock)) * 60);
 	 },
 
 	 getTime : function(){
+	 	console.log("time:" + this.clock);
 	 	var mm = parseInt(this.clock / 60);
 	 	var ss = this.clock % 60;
 	 	var hour = parseInt(mm / 60);
@@ -290,30 +302,36 @@ Construct.prototype = {
 
 	 gameOver : function(){
 	 	clearInterval(this.timer);
-	 	this.showFinishDialog();
+	 	this.gradeDriver(this.getResult(), function(that){
+	 		return function(is_save){
+	 			that.showFinishDialog.call(that, is_save);
+	 		}
+	 	}(this));
 	 },
 
 	 /**
 	  * 展示最后的成绩面板
 	  * @return {[type]} [description]
 	  */
-	 showFinishDialog : function(){
-	 	console.log('right : ' + this.right_num);
-	 	console.log('word : ' + this.word_num);
-	 	console.log('length : ' + this.length);
-	 	var div = document.createElement("div");
-	 	div.id = "finish-dialog";
-	 	div.innerHTML = "<div id='dialog-main'>"
+	 showFinishDialog : function(is_save){
+	 	// console.log('right : ' + this.right_num);
+	 	// console.log('word : ' + this.word_num);
+	 	// console.log('length : ' + this.length);
+	 	var html = "<div id='finish-dialog'><div id='dialog-main'>"
 	 						+"<div id='dialog-head'></div>"
 	 						+"<div id='dialog-content'>"
+	 							+"<div id='save-status'>" + (is_save ? "成绩保存成功" : "成绩保存失败") + "<div>"
 	 							+"<p>总共用时:"+ 	 this.getTime()
 	 							+"</p><p>平均速度:"+ this.getGrade() +"字每分钟"
 	 							+"</p><p>正确率:"+ 	 this.getRightRate() + " %"
 	 							+"</p><p>"+ 		 this.resultWord() 
 	 						+"</p></div>"
 	 						+"<div id='dialog-foot'></div>"
-	 					+"</div>";
-	 	this.main.appendChild(div);
+	 					+"</div></div>";
+	 	that = this;
+	 	$.dialog('dz-result' , '成绩' , html, function(){
+	 		that.load();
+	 	}, this.quitCallback);
 	 },
 
 	 /**
@@ -324,7 +342,7 @@ Construct.prototype = {
 	 	if(parseInt((this.right_num / this.word_num) * 100) < 60){
 	 		return "正确率有待提高，赶紧练习哦！";
 	 	}
-	 	if(this.lang == "zh"){
+	 	if(this.lang == 0){
 	 		if(this.grade < 50){
 	 			return "打字速度不给力呀，还是再练练吧";
 	 		}
@@ -336,7 +354,7 @@ Construct.prototype = {
 	 		}
 	 		return "不得了了，超神啦！！！";
 	 	}
-	 	if(this.lang == "en"){
+	 	if(this.lang == 1){
 	 		if(this.grade < 100){
 	 			return "打字速度不给力呀，还是再练练吧";
 	 		}
@@ -348,7 +366,7 @@ Construct.prototype = {
 	 		}
 	 		return "不得了了，超神啦！！！";
 	 	}
-	 	
+	 	return "失败";
 	 },
 
 	 getResult : function(){
@@ -443,11 +461,11 @@ Enter.prototype = {
 
 var unique;
 
-function getInstance(selector, text){
+function getInstance(selector, lang, text, gradeDriver, quitCallback){
     if( unique === undefined ){
-        unique = new Construct(selector, text);
+        unique = new Construct(selector, lang, text, gradeDriver, quitCallback);
     }else{
-    	unique.load(text);
+    	unique.load(unique.lang, text);
     }
     return unique;
 }

@@ -8,7 +8,9 @@ App.view={};	//应用的视图
  */
 App.controller = {
 
-	lang : '',	//语言
+	lang : 0,	//语言
+
+	article_id : 0,  //文章
 	
 	/**
 	 * 加载必须内容
@@ -30,7 +32,11 @@ App.controller = {
 		//设置 语言
 		this.lang = lang;
 		//随机文章
-		App.articleController.random_article(successCallback, errorCallBack);
+		App.articleController.random_article(function(article){
+			this.article_id = article.id;
+			console.log(article);
+			successCallback(lang, article.title, article.body);
+		}, errorCallBack);
 	},
 
 	over_dz : function(){
@@ -51,4 +57,15 @@ App.controller = {
 
 		// }
 	},
+
+	log_grade : function(grade, fun){
+		grade.lang = App.controller.lang;
+		console.log(grade);
+		App.gradeController.insert_grade(grade, function(){
+			fun(true);
+		},function(test){
+			console.log(test);
+			fun(false);
+		});
+	}
 };

@@ -63,9 +63,7 @@ App.articleController = {
 		}else{
 			id = this.en_list[i].id;
 		}
-		App.model.article.selectFullArticle(id, function(article){
-			success(article.title,article.body);
-		}, error);
+		App.model.article.selectFullArticle(id, success, error);
 	},
 
 	/**
@@ -140,6 +138,8 @@ App.articleController = {
 	 * errorCallBack   : text 错误信息
 	 */
 	delete_article : function(article,successCallBack,errorCallBack){
+		console.log("article : ");
+		console.log(article);
 		App.model.article.deleteArticles([article],function(){
 			if(successCallBack){
 				successCallBack();

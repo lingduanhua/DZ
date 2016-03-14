@@ -14,7 +14,7 @@ App.view = {
 					(articles[i].lang == 0 ? '中文' : '英文') + "</td><td>" +
 					articles[i].length + "</td><td>" +
 					"<a class='opt edit-article' onclick='edit_article("+ articles[i].id +")'>编辑</a>"+
-					"<a class='opt del-article' onclick='del_article("+ articles[i].id +")'>删除</a></td></tr>"
+					"<a class='opt del-article' onclick='del_article("+ articles[i].id + ",\"" +  articles[i].title + "\")'>删除</a></td></tr>"
 		};
 		$('#article-table-body').html(html);
 	},
