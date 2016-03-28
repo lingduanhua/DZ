@@ -51,6 +51,9 @@ App.articleController = {
 	 * errorCallBack   : text 错误信息
 	 */
 	random_article : function(success, error){
+		if(this.is_load){
+			this.reload();
+		}
 		var lang = App.controller.lang;
 		var length = lang == 0 ? this.zh_list.length : this.en_list.length; 
 		if(length <= 0){
@@ -138,8 +141,6 @@ App.articleController = {
 	 * errorCallBack   : text 错误信息
 	 */
 	delete_article : function(article,successCallBack,errorCallBack){
-		console.log("article : ");
-		console.log(article);
 		App.model.article.deleteArticles([article],function(){
 			if(successCallBack){
 				successCallBack();

@@ -4,26 +4,15 @@
  */
 App.model.grade = {
     /**
-     * 删除成绩
-     * @param  array grades       要删除的成绩数组
+     * 删除所有成绩
      * @param  function successCallback 成功回调函数
      * @param  function errorCallback   失败回调函数
      * {
      *     id
      * }
      */
-	deletegrades : function(grades ,successCallback, errorCallback){
-		var remaining = grades.length, i, l, data = [];
-
-		if (remaining === 0 && successCallback) {
-            successCallback();
-        }
-
-        for (i = 0, l = grades.length; i < l; i = i + 1) {
-            data[i] = [grades[i].id];
-        }
-
-		App.database.runQuery("DELETE FROM grades WHERE id = ?", data, successCallback, errorCallback);
+	deleteAll : function(successCallback, errorCallback){
+		App.database.runQuery("DELETE FROM grades WHERE id > 0", [], successCallback, errorCallback);
 	},
 
     /**
@@ -56,8 +45,8 @@ App.model.grade = {
      *     id, title, lang, length
      * }
      */
-	selectAllgrades : function(successCallback){
-		App.database.runQuery("SELECT id, title, lang, length FROM grades", [], successCallback);
+	selectAllgrades : function(lang, successCallback){
+		App.database.runQuery('SELECT id, speed, right, lang, time FROM grades where lang = '+lang+' order by time desc limit 5', [], successCallback);
 	},
 
     /**

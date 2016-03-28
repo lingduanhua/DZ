@@ -18,6 +18,7 @@ App.controller = {
 	load : function(){
 		//加载本地数据
 		App.database.open();
+		App.articleController.load();
 	},
 
 	/**

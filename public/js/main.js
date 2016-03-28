@@ -1,7 +1,7 @@
 $(function(){
 	//加载App
 	App.controller.load();
-	skip_page('article');
+	skip_page('grade');
 	//弹出菜单
 	$('#menu-button').on('click',function(){
 		if($('.sider').is(':visible')){
@@ -12,7 +12,8 @@ $(function(){
 	});
 	//导航栏跳转
 	$('.nav-item').on('click',function(){
-		skip_page($(this).attr('for'));
+		var tar = $(this).attr('for');
+		if(typeof tar != 'undefined'  && tar != '') skip_page(tar);
 	});
 
 	//添加文章按钮
@@ -82,10 +83,6 @@ function start_dz(lang){
 		errorAlert(text);
 	});
 }
-
-function errorAlert(text){
-	alert(text);
-}
 /**
  * 菜单页跳转
  * @param  {string} page 页id
@@ -134,7 +131,7 @@ function del_article(id,title){
 	 	},function(text){
 	 		errorAlert(text);
 	 	})
-	}]);	
+	}]);
 }
 function edit_article(id){
  	App.articleController.edit_article(id, function(html){
@@ -142,4 +139,30 @@ function edit_article(id){
  			article_post(id);
  		});
  	})	
+}
+function resetGrade(){
+	highAlert('confirm','是否重置成绩记录 ?', ['确定', '取消'],[function(){
+		App.gradeController.reset(function(){
+	 		successAlert("重置成功");
+	 	},function(text){
+	 		errorAlert(text);
+	 	})
+	}]);
+} 
+
+function changeGrageLang(lang){
+	var temp = 0;
+	if(lang != 'zh'){
+		temp = 1;
+	}
+	App.gradeController.showTable(temp);
+	$('#lang-radio').find('.active').removeClass('active');
+	$('#lang-radio').find(':nth-child('+(temp+1)+')').addClass('active');
+}
+function changePanel(panel){
+	$('#grade-panel-bar').css({
+		left : (- panel * $('#grade-window').width()) + 'px'
+	});
+	$('#panel-radio').find('.active').removeClass('active');
+	$('#panel-radio').find(':nth-child('+(panel+1)+')').addClass('active');
 }

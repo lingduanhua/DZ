@@ -53,4 +53,74 @@ App.view = {
 		return html;
 	},
 
+	showGrades : function(grades){
+		var html_table = "";
+
+		for (var i = 0; i < grades.length; i++) {
+			html_table += "<tr gid="+grades[i].id+"><td>"+(i+1)+"</td><td>" +
+					(grades[i].speed > 0 ? grades[i].speed : 0) + "</td><td>" +
+					(grades[i].right > 0 ? grades[i].right : 0) + "</td><td>" +
+					(grades[i].lang == 0 ? '中文' : '英文') + "</td><td>" +
+					(new Date(grades[i].time).Format('yyyy-MM-dd hh:mm')) + "</td></tr>"
+		};
+		$('#grade-table-body').html(html_table);
+		 // 基于准备好的dom，初始化echarts实例
+		var myChart = echarts.init(document.getElementById('grade-chart'));
+		// 指定图表的配置项和数据
+		var ad = [];
+        var bd = [];
+        var cd = [];
+        for (var i = grades.length-1; i >=0 ; i--) {
+        	var date = new Date(grades[i].time);
+        	var name = date.Format('MM-dd hh:mm');
+        	cd.push(name);
+        	// ad.push(grades[i].speed == null ? 0 : grades[i].speed);
+        	// bd.push(grades[i].right);
+			ad.push({
+				name:name,
+				value:(grades[i].speed > 0 ? grades[i].speed : 0)
+			});
+			bd.push({
+				name:name,
+				value:(grades[i].right > 0 ? grades[i].right : 0)
+			})
+		};
+		console.log(ad);
+		console.log(bd);
+		console.log(cd);
+		var option = {
+            title: {
+                text: ''
+            },
+            tooltip: {
+            	trigger: 'axis',
+            	/*formatter: function (params) {
+			        return params.data.name + "<br><span class='chart-span' style='background-color:"+params.color+"'></span>" + params.seriesName + ":" + params.data.value;
+			    },*/
+            },
+            legend: {
+                data:['速度','正确率']
+            },
+            xAxis: {
+                type: 'category',
+                 boundaryGap : false,
+                data:cd
+            },
+            yAxis: {},
+            series: [{
+                name: '速度',
+                type: 'line',
+                data: ad
+            },{
+                name: '正确率',
+                type: 'line',
+                data: bd
+            }]
+        };
+        
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+	}
+
 }

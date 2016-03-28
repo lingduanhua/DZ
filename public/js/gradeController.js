@@ -12,5 +12,18 @@ App.gradeController = {
 			time : (new Date()).getTime()
 		}
 		App.model.grade.insertGrades([data], successCallback, errorCallback);
+	},
+
+	load : function(){
+		this.showTable(0);
+	},
+
+	showTable : function(lang){
+		App.model.grade.selectAllgrades(lang, App.view.showGrades);
+	},
+
+	reset : function(successCallback,errorCallback){
+		App.model.grade.deleteAll(successCallback,errorCallback);
 	}
+
 }
